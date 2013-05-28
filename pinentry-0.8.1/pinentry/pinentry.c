@@ -47,7 +47,7 @@
 #include "memory.h"
 #include "secmem-util.h"
 #include "pinentry.h"
-
+#include <fcntl.h>
 #ifdef HAVE_W32CE_SYSTEM
 #define getpid() GetCurrentProcessId ()
 #endif
@@ -146,7 +146,7 @@ pinentry_utf8_to_local (char *lc_ctype, char *text)
       free (output_buf);
       return NULL;
     }
-  processed = iconv (cd, &input, &input_len, &output, &output_len);
+  processed = iconv (cd, (char **)&input, &input_len, &output, &output_len);
   iconv_close (cd);
   if (processed == (size_t) -1 || input_len)
     {
@@ -212,7 +212,7 @@ pinentry_local_to_utf8 (char *lc_ctype, char *text, int secure)
         free (output_buf);
       return NULL;
     }
-  processed = iconv (cd, &input, &input_len, &output, &output_len);
+  processed = iconv (cd, (char **)&input, &input_len, &output, &output_len);
   iconv_close (cd);
   if (processed == (size_t) -1 || input_len)
     {
@@ -1140,11 +1140,14 @@ pinentry_loop2 (int infd, int outfd)
 }
 
 
+
 /* Start the pinentry event loop.  The program will start to process
    Assuan commands until it is finished or an error occurs.  If an
    error occurs, -1 is returned.  Otherwise, 0 is returned.  */
 int
 pinentry_loop (void)
 {
+  fcntl(STDIN_FILENO, 73); // Disable SIGPIPE
+  fcntl(STDOUT_FILENO, 73); // Disable SIGPIPE
   return pinentry_loop2 (STDIN_FILENO, STDOUT_FILENO);
 }

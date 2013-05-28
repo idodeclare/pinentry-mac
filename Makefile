@@ -9,7 +9,7 @@ all: compile
 update-core:
 	@cd Dependencies/GPGTools_Core; git pull origin master; cd -
 update-me:
-	@git pull
+	@git pull origin master
 
 update: update-me update-core
 
@@ -25,3 +25,4 @@ clean:
 test: compile
 	@echo "nothing to test"
 
+init:
