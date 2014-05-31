@@ -24,31 +24,17 @@
 
 
 @implementation PinentryController : NSWindowController
-@synthesize descriptionText, promptText, errorText, passphrase, grab, confirmMode, oneButton, saveInKeychain, canUseKeychain, showType;
+@synthesize descriptionText, promptText, errorText, passphrase, grab, confirmMode, oneButton, saveInKeychain, canUseKeychain, showType, icon=_icon;
 
 PinentryController *_sharedInstance = nil;
 
 - (id)init {
 	self = [super init];
 	
-	
-	descriptionText = nil;
-	promptText = nil;
-	errorText = nil;
-	passphrase = nil;
-	okButtonText = nil;
-	cancelButtonText = nil;
-	
-	confirmMode = NO;
-	oneButton = NO;
-	okPressed = NO;
-	canUseKeychain = NO;
-	
 	showType = [[GPGDefaults gpgDefaults] boolForKey:@"ShowPassphrase"];
 	saveInKeychain = [[GPGDefaults gpgDefaults] boolForKey:@"UseKeychain"];
 
 	[NSBundle loadNibNamed:@"Pinentry" owner:self];
-	
 	
 	return self;	
 }
@@ -76,12 +62,19 @@ PinentryController *_sharedInstance = nil;
 
 
 
+- (NSImage *)icon {
+	if (!_icon) {
+		_icon = [NSImage imageNamed:@"Icon"];
+	}
+	return _icon;
+}
+
+
 // Button properties
 
 - (void)setOkButtonText:(NSString *)value {
 	if (value != okButtonText) {
-		[okButtonText release];
-		okButtonText = [value retain];
+		okButtonText = value;
 		[self updateButtonSizes];
 	}
 }
@@ -90,8 +83,7 @@ PinentryController *_sharedInstance = nil;
 }
 - (void)setCancelButtonText:(NSString *)value {
 	if (value != cancelButtonText) {
-		[cancelButtonText release];
-		cancelButtonText = [value retain];
+		cancelButtonText = value;
 		[self updateButtonSizes];
 	}	
 }

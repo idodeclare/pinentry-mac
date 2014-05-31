@@ -30,6 +30,8 @@
 	
 	NSString *okButtonText;
 	NSString *cancelButtonText;
+	
+	NSImage *_icon;
 
 	BOOL grab;
 	BOOL confirmMode;
@@ -42,10 +44,11 @@
 	IBOutlet NSTextField *passphraseField;
 	IBOutlet NSTextField *securePassphraseField;	
 }
-@property (assign) NSWindow *window;
+@property (nonatomic, unsafe_unretained) NSWindow *window;
 
-@property (retain) NSString *descriptionText, *promptText, *errorText, *passphrase, *okButtonText, *cancelButtonText;
-@property BOOL grab, confirmMode, oneButton, saveInKeychain, canUseKeychain, showType;
+@property (nonatomic, strong) NSString *descriptionText, *promptText, *errorText, *passphrase, *okButtonText, *cancelButtonText;
+@property (nonatomic) BOOL grab, confirmMode, oneButton, saveInKeychain, canUseKeychain, showType;
+@property (nonatomic, strong) NSImage *icon;
 
 
 - (NSInteger)runModal;
